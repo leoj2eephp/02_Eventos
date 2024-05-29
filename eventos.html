@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <div class="col mb-2">
+        <label for="nombre">Nombre</label>
+        <input type="text" id="nombre" class="form-control" />
+        <span class="text-danger" id="errorNombre" style="display: none;">Nombre no puede quedar vacío</span>
+      </div>
+      <div class="col mb-2">
+        <label for="apellido">Apellido</label>
+        <input type="text" id="apellido" class="form-control" />
+        <span id="errorApellido" class="text-danger" style="display: none;">
+            Apellido no debe quedar vacío
+        </span>
+      </div>
+      <div class="col mb-2">
+        <label for="nombre">Ciudad</label>
+        <select id="ciudades" class="form-select">
+            <option value="-1">NO SELECCIONADO</option>
+            <option value="13">Santiago</option>
+            <option value="9">Temuco</option>
+            <option value="14">Valdivia</option>
+            <option value="10">Osorno</option>
+        </select>
+      </div>
+      <div class="col mt-5">
+        <button class="btn btn-primary" id="save">Guardar</button>
+      </div>
+
+      <table class="table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Ciudad</th>
+            </tr>
+        </thead>
+        <tbody id="tbody">
+            
+        </tbody>
+      </table>
+    </div>
+
+
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+
+    <script>
+        const nombre = document.querySelector("#nombre")
+        const apellido = document.querySelector("#apellido")
+        const errorNombre = document.querySelector("#errorNombre")
+        const errorApellido = document.querySelector("#errorApellido")
+        const ciudades = document.querySelector("#ciudades")
+        const tbody = document.querySelector("#tbody")
+        const save = document.querySelector("#save")
+        // El evento blur se dispara cuando el elemento pierde el foco. EJ: si estamos en una caja de texto
+        // y después hacemos click en otra parte, ahí se está perdiendo el foco.
+        nombre.addEventListener("blur", function() {
+            // alert("Se disparó evento blur.")
+            // Si al dispararse este blur el campo nombre no ha sido llenado con un valor, mostrar span con error
+            if (nombre.value == "") {
+                errorNombre.style.display = "block"
+            } else {
+                errorNombre.style.display = "none"
+            }
+        })
+
+        apellido.addEventListener("blur", function() {
+            if (apellido.value == "") {
+                errorApellido.style.display = "block"
+            } else {
+                errorApellido.style.display = "none"
+            }
+        })
+
+        ciudades.addEventListener("change", function() {
+            console.log(`Posición seleccionada: ${ciudades.selectedIndex}`)
+        })
+
+        // Agregar evento click al botón. Validar que ningún campo esté vacío o sin selección.
+        // Si pasa la validación, mostrar los datos registrados en una tabla de una fila.
+        save.addEventListener("click", function() {
+          const esValido = validaciones()
+          if (esValido == true) {
+            // Para crear un elemento (TAG) de HTML podemos usar el método documento.createElement()
+            // Este método espera que le pasemos por parámetro, como un String, el nombre del elemento
+            const fila = document.createElement("tr")
+            // OJO!! Se crea EN MEMORIA, pero NO se está agregando al HTML aún..
+            // Para que este elemento sea visible, tenemos que agregarlo a un NODO padre.
+            // appendChild() espera como parámetro un nodo (el que creas con createElement) y lo agrega
+            // como hijo al nodo que está llamando a appendChild()
+            // En este caso, se está agrega fila (que es un tr) a tbody (que es el tbody de la tabla).
+            tbody.appendChild(fila)
+            const col1 = document.createElement("td")
+            const col2 = document.createElement("td")
+            const col3 = document.createElement("td")
+            col1.innerText = nombre.value
+            col2.innerText = apellido.value
+            // ciudades.options retorna la lista de todos los elementos OPTION que tiene dentro
+            // Para acceder a un elemento de una lista SIEMPRE se hace a través de la posición (índice o index)
+            // Puedo saber cuál es la POSICIÓN del elemento OPTION seleccionado con ciudades.selectedIndex
+            // Ahora solo tengo que combinar estos 2 valores.. para obtener el option que se seleccionó,
+            // saco del arreglo ciudades.options la posición que obtengo con ciudadaes.selectedIndex
+            const opcionSeleccionada = ciudades.options[ciudades.selectedIndex]
+            // Ahora opcionSeleccionada contiene el objeto OPTION que se seleccionó del SELECT
+            // Si quiero obtener el texto que está entre los tags de OPTION, puedo usar innerText, innerHTML o text.0
+            col3.innerText = opcionSeleccionada.innerText
+            fila.appendChild(col1)
+            fila.appendChild(col2)
+            fila.appendChild(col3)
+          }
+        })
+
+        function validaciones() {
+          if (nombre.value == "") return false;
+          if (apellido.value == "") return false;
+          if (ciudades.value == -1) return false;
+          // Si paso todas las validaciones retorno TRUE
+          return true;
+        }
+    </script>
+  </body>
+</html>
