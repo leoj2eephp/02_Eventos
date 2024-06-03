@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Cargar Tabla</title>
     <link
       rel="stylesheet"
@@ -10,40 +10,83 @@
       integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
       crossorigin="anonymous"
     />
-</head>
-<body>
-    
+  </head>
+  <body>
     <table class="table">
-        <thead>
-            <tr>
-                <td>ID</td>
-                <td>Nombre</td>
-                <td>Tipo</td>
-                <td>Shiny</td>
-            </tr>
-        </thead>
-        <tbody id="cuerpoTabla">
-        </tbody>
+      <thead>
+        <tr>
+          <td>ID</td>
+          <td>Nombre</td>
+          <td>Tipo</td>
+          <td>Shiny</td>
+          <td>Acciones</td>
+        </tr>
+      </thead>
+      <tbody id="cuerpoTabla"></tbody>
     </table>
 
     <script>
-        const cuerpoTabla = document.querySelector("#cuerpoTabla")
-        const pokemones = [
-            {id: 1, nombre: "Pikachu", tipo: "Eléctrico", shiny: false},
-            {id: 2, nombre: "Ditto", tipo: "Normal", shiny: false},
-            {id: 3, nombre: "Charizard", tipo: "Fuego", shiny: true},
-            {id: 4, nombre: "Diglet", tipo: "Tierra", shiny: true},
-            {id: 5, nombre: "Onix", tipo: "Roca", shiny: false},
-        ]
+      const cuerpoTabla = document.querySelector("#cuerpoTabla");
+      const pokemones = [
+        { id: 1, nombre: "Pikachu", tipo: "Eléctrico", shiny: false },
+        { id: 2, nombre: "Ditto", tipo: "Normal", shiny: false },
+        { id: 3, nombre: "Charizard", tipo: "Fuego", shiny: true },
+        { id: 4, nombre: "Diglet", tipo: "Tierra", shiny: true },
+        { id: 5, nombre: "Onix", tipo: "Roca", shiny: false },
+      ];
 
-        // EJERCICIO: Llene de datos la tabla con los pokemones
-        pokemones.forEach(p => {
-           // Crear una fila y agregarla al tbody
-            const fila = document.createElement("tr")
-           cuerpoTabla.appendChild(fila)
-            // Crear 4 columnas y agregarlas a la fila
-            // Modificar el texto dentro de las columnas 
+      // EJERCICIO: Llene de datos la tabla con los pokemones
+      pokemones.forEach((p) => {
+        // Crear una fila y agregarla al tbody
+        const fila = document.createElement("tr");
+        cuerpoTabla.appendChild(fila);
+        // Crear 4 columnas y agregarlas a la fila
+        // Modificar el texto dentro de las columnas
+        const tdId = document.createElement("td");
+        tdId.innerText = p.id;
+        const tdNom = document.createElement("td");
+        tdNom.innerText = p.nombre;
+        const tdTipo = document.createElement("td");
+        tdTipo.innerText = p.tipo;
+        const tdShi = document.createElement("td");
+        // Expresión ternaria (if corto)
+        // Sirve cuando necesitamos dar un valor a una variable dependiendo de una condición
+        /* if (p.shiny) {
+            tdShi.innerText = "Sí";
+        } else {
+            tdShi.innerText = "No";
+        } */
+        // Lo que está antes del signo de interrogación es una expresión booleana
+        // Lo que viene después del signo ? es el valor que se asignará a la variable si la expresión
+        // booleana devuelve true.
+        // Lo que está después del signo : es el ELSE, o sea, es lo que se asignará a la variable
+        // si la expresión booleana devuelve false.
+        tdShi.innerText = p.shiny == true ? "Sí" : "No";
+
+        fila.appendChild(tdId);
+        fila.appendChild(tdNom);
+        fila.appendChild(tdTipo);
+        fila.appendChild(tdShi);
+
+        // Agregar para la columna "Acciones" un botón "Eliminar"
+        const tdAc = document.createElement("td");
+        const boton = document.createElement("button");
+        boton.innerText = "Eliminar";
+        boton.className = "btn btn-danger";
+        tdAc.appendChild(boton);
+        fila.appendChild(tdAc);
+
+        // Darle un evento click para que, al activarse, elimine esa fila de la tabla.
+        boton.addEventListener("click", function (event) {
+            // RECUERDA que aquí aún estamos DENTRO del ciclo forEach()
+            // Así que ESTE botón está enlazado con ESTA fila.. por eso al pulsar
+            // sabe qué fila eliminar..
+            cuerpoTabla.removeChild(fila)
+            /* const trTarget = event.target.parentNode.parentNode
+            cuerpoTabla.removeChild(trTarget) */
+            // event.target.parentNode.parentNode.innerHTML = ""
         });
+      });
     </script>
-</body>
+  </body>
 </html>
